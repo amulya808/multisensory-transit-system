@@ -19,6 +19,7 @@ const database = getDatabase(app);
 
 
 type PassengerCountCallback = (count: number) => void;
+type FlameDetectionCallback = (flameDetected: boolean) => void;
 
 
 export const subscribeToPassengerCount = (callback: PassengerCountCallback): Unsubscribe => {
@@ -38,6 +39,23 @@ export const subscribeToPassengerCount = (callback: PassengerCountCallback): Uns
   return unsubscribe;
 };
 
+export const subscribeToFlameDetection = (callback: FlameDetectionCallback): Unsubscribe => {
+  const flameDetectionRef = ref(
+    database,
+    "bus_data/bus_01/safety_info/flame_detected"
+  );
+  
+  const unsubscribe = onValue(flameDetectionRef, (snapshot: DataSnapshot) => {
+    if (snapshot.exists()) {
+      callback(snapshot.val());
+    } else {
+      callback(false); 
+    }
+  });
+  
+  return unsubscribe;
+}
+
 let firebaseInstance: ReturnType<typeof initializeApp> | null = null;
 
 export const getFirebaseInstance = (): ReturnType<typeof initializeApp> => {
@@ -51,6 +69,7 @@ export const getFirebaseInstance = (): ReturnType<typeof initializeApp> => {
 const firebaseService = {
   subscribeToPassengerCount,
   getFirebaseInstance,
+  subscribeToFlameDetection,
 };
 
 export default firebaseService;
