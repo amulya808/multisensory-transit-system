@@ -58,10 +58,8 @@ export function Location() {
   }, []); 
 
   return (
-    <div className="flex justify-center gap-4 px-4 lg:px-6">
- 
-      <Card className="w-full max-w-3xl h-100 @container/card flex flex-col overflow-hidden m-0 p-0">
-
+    <div className="flex justify-start gap-4 px-4 lg:px-6 mt-4">
+      <Card className="w-full max-w-5xl h-100 @container/card flex flex-col overflow-hidden m-0 p-0">
         <CardContent className="flex-grow p-0 relative min-h-0">
           {isLoading && (
              <div className="flex items-center justify-center min-h-0">
@@ -88,5 +86,5 @@ export function Location() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

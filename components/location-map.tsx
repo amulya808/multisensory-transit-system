@@ -1,6 +1,6 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, LayersControl } from 'react-leaflet';
 import L from 'leaflet'; // Import Leaflet library itself
 import { useEffect } from 'react';
 
@@ -56,16 +56,26 @@ if (isNaN(latitude) || isNaN(longitude)) {
 
 return (
     <MapContainer
+    attributionControl={false}
         center={position}
         zoom={zoom}
         scrollWheelZoom={true}
         style={{ height: '100%', width: '100%', outline: 'none' }}
     >
-      {/* Core map layers */}
-      <TileLayer
-        attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+                 <LayersControl position="topright">
+                <LayersControl.BaseLayer checked name="Street Map">
+                    <TileLayer
+                        attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                </LayersControl.BaseLayer>
+                <LayersControl.BaseLayer name="Satellite">
+                    <TileLayer
+                        attribution='© <a href="https://www.esri.com">Esri</a>'
+                        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                    />
+                </LayersControl.BaseLayer>
+            </LayersControl>
       <Marker position={position}>
         <Popup>
           Bus Location: <br /> Lat: {latitude.toFixed(6)}, Lng: {longitude.toFixed(6)}
