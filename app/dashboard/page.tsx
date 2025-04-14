@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header"
 import { SensorCards } from "@/components/sensor-cards"
 import { Location } from "@/components/location"
 
+
 import {
   SidebarInset,
   SidebarProvider,

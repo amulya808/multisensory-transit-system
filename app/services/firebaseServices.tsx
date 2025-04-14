@@ -20,6 +20,7 @@ const database = getDatabase(app);
 
 type PassengerCountCallback = (count: number) => void;
 type FlameDetectionCallback = (flameDetected: boolean) => void;
+type LocationCallback = (location: { latitude: number; longitude: number }) => void;
 
 
 export const subscribeToPassengerCount = (callback: PassengerCountCallback): Unsubscribe => {
@@ -56,6 +57,26 @@ export const subscribeToFlameDetection = (callback: FlameDetectionCallback): Uns
   return unsubscribe;
 }
 
+export const subscribeToLocation = (callback: LocationCallback, errorCallback: (error: Error) => void): Unsubscribe => {
+  const locationRef = ref(database, "bus_data/bus_01/location");
+
+  const unsubscribe = onValue(locationRef, (snapshot: DataSnapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      if (data && typeof data.latitude === 'number' && typeof data.longitude === 'number') {
+        callback(data);
+      } else {
+        errorCallback(new Error("Invalid location data received."));
+      }
+    } else {
+      errorCallback(new Error("No location data available."));
+    }
+  }, (error) => {
+    errorCallback(error);
+  });
+
+  return unsubscribe;
+}
 let firebaseInstance: ReturnType<typeof initializeApp> | null = null;
 
 export const getFirebaseInstance = (): ReturnType<typeof initializeApp> => {

@@ -1,0 +1,80 @@
+"use client";
+
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet'; // Import Leaflet library itself
+import { useEffect } from 'react';
+
+
+L.Icon.Default.mergeOptions({
+
+    iconUrl: '/leaflet/marker-icon.png',
+    iconRetinaUrl: '/leaflet/marker-icon-2x.png',
+    shadowUrl: '/leaflet/marker-shadow.png',
+
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+});
+
+
+interface LocationMapProps {
+  latitude: number;
+  longitude: number;
+  zoom?: number;
+}
+
+
+function ChangeView({ center, zoom }: { center: L.LatLngExpression, zoom: number }) {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(center, zoom);
+  }, [center, zoom, map]);  
+  return null;
+}
+
+function InvalidateSize() {
+    const map = useMap();
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            console.log("Invalidating map size"); 
+        }, 100); 
+
+        return () => clearTimeout(timer); 
+    }, [map]); 
+    return null;
+}
+
+
+export function LocationMap({ latitude, longitude, zoom = 13 }: LocationMapProps) {
+    const position: L.LatLngExpression = [latitude, longitude];
+
+if (isNaN(latitude) || isNaN(longitude)) {
+    console.error("Invalid coordinates received:", latitude, longitude);
+    return <div className="flex items-center justify-center h-full text-destructive">Invalid Coordinates</div>;
+}
+
+return (
+    <MapContainer
+        center={position}
+        zoom={zoom}
+        scrollWheelZoom={true}
+        style={{ height: '100%', width: '100%', outline: 'none' }}
+    >
+      {/* Core map layers */}
+      <TileLayer
+        attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker position={position}>
+        <Popup>
+          Bus Location: <br /> Lat: {latitude.toFixed(6)}, Lng: {longitude.toFixed(6)}
+        </Popup>
+      </Marker>
+
+      <ChangeView center={position} zoom={zoom} />
+      <InvalidateSize /> 
+
+    </MapContainer>
+  );
+}
