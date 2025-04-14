@@ -10,20 +10,23 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { subscribeToPassengerCount, subscribeToFlameDetection } from "../app/services/firebaseServices";
+import { subscribeToPassengerCount, subscribeToFlameDetection, getFirebaseInstance } from "../app/services/firebaseServices";
+import { getDatabase, onValue, ref } from "firebase/database";
 
 
 export function SensorCards() {
   const [passengerCount, setPassengerCount] = useState(0);
-  const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [lastPassengerUpdate, setLastPassengerUpdate] = useState(new Date());
+  const [lastSafetyUpdate, setLastSafetyUpdate] = useState(new Date());
   const [flameDetected, setFlameDetected] = useState(false);
   const [alertCount, setAlertCount] = useState(0);
   const previousFire = useRef(false);
 
+
   useEffect(() => {
     const unsubscribePassenger = subscribeToPassengerCount((count) => {
       setPassengerCount(count);
-      setLastUpdated(new Date());
+
     });
 
     const unsubscribeFlame = subscribeToFlameDetection((detected) => {
@@ -35,9 +38,29 @@ export function SensorCards() {
       previousFire.current = detected;
     });
 
+    const database = getDatabase(getFirebaseInstance());
+    const passengerTimestampRef = ref(database, "bus_data/bus_01/passenger_info/last_update");
+    const safetyTimestampRef = ref(database, "bus_data/bus_01/safety_info/last_update");
+    
+    const unsubscribePassengerTimestamp = onValue(passengerTimestampRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const timestamp = snapshot.val();
+        setLastPassengerUpdate(new Date(timestamp));
+      }
+    });
+    
+    const unsubscribeSafetyTimestamp = onValue(safetyTimestampRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const timestamp = snapshot.val();
+        setLastSafetyUpdate(new Date(timestamp));
+      }
+    });
+
     return () => {
       unsubscribePassenger();
       unsubscribeFlame();
+      unsubscribePassengerTimestamp();
+      unsubscribeSafetyTimestamp();
     };
   }, []);
   const fireCardClasses = flameDetected
@@ -51,16 +74,16 @@ export function SensorCards() {
     : "text-green-500 dark:text-green-400";
 
     const fireIcon = flameDetected ? (
-      <IconFlame className="size-7 text-destructive" /> // Larger red flame icon
+      <IconFlame className="size-7 text-destructive" /> 
     ) : (
-      <IconShieldCheck className="size-6 text-green-600" /> // Green shield/check icon
+      <IconShieldCheck className="size-6 text-green-600" /> 
     );
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card">
         <CardHeader>
           <IconFriends className="!size-6" />
-          <CardDescription>Passenger</CardDescription>
+          <CardDescription className="text-xl font-bold">Passenger</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {passengerCount}
           </CardTitle>
@@ -70,14 +93,14 @@ export function SensorCards() {
             Current Number of Passengers <IconTrendingUp className="size-4" />
           </div>
           <div className="text-muted-foreground">
-            Last updated: {lastUpdated.toLocaleTimeString()}
+          Last updated: {lastPassengerUpdate.toLocaleTimeString()}
           </div>
         </CardFooter>
       </Card>
       <Card className={`shadow-sm transition-colors duration-300 ${fireCardClasses}`}>
         <CardHeader>
           {fireIcon}
-          <CardDescription>Fire Detection Status</CardDescription>
+          <CardDescription className="text-xl font-bold">Fire Detection Status</CardDescription>
           
           <CardTitle
             className={`text-2xl tabular-nums @[250px]/card:text-3xl ${fireTitleClasses}`}
@@ -89,12 +112,15 @@ export function SensorCards() {
       <Card className="@container/card">
         <CardHeader>
           <IconAlertHexagon className="!size-6" />
-          <CardDescription>Alert Status</CardDescription>
+          <CardDescription className="text-xl font-bold">Alert Status</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {alertCount}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
+        <div className="text-muted-foreground">
+          Last fire detected: {lastSafetyUpdate.toLocaleTimeString()}
+          </div>
         </CardFooter>
       </Card>
     </div>
