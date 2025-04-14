@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IconAlertHexagon, IconFlame, IconShieldCheck, IconTrendingUp } from "@tabler/icons-react";
 import { IconFriends } from "@tabler/icons-react";
 import {
@@ -17,6 +17,8 @@ export function SensorCards() {
   const [passengerCount, setPassengerCount] = useState(0);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [flameDetected, setFlameDetected] = useState(false);
+  const [alertCount, setAlertCount] = useState(0);
+  const previousFire = useRef(false);
 
   useEffect(() => {
     const unsubscribePassenger = subscribeToPassengerCount((count) => {
@@ -26,7 +28,11 @@ export function SensorCards() {
 
     const unsubscribeFlame = subscribeToFlameDetection((detected) => {
       setFlameDetected(detected);
-      setLastUpdated(new Date());
+
+      if (detected && !previousFire.current) {
+       setAlertCount(prevCount => prevCount + 1);
+      }
+      previousFire.current = detected;
     });
 
     return () => {
@@ -85,7 +91,7 @@ export function SensorCards() {
           <IconAlertHexagon className="!size-6" />
           <CardDescription>Alert Status</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            4
+            {alertCount}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
