@@ -12,6 +12,7 @@ import {
 } from "./ui/card";
 import { subscribeToPassengerCount, subscribeToFlameDetection, getFirebaseInstance } from "../app/services/firebaseServices";
 import { getDatabase, onValue, ref } from "firebase/database";
+import { VehicleStatusCard } from "./vehicle-status";
 
 
 export function SensorCards() {
@@ -123,6 +124,7 @@ export function SensorCards() {
           </div>
         </CardFooter>
       </Card>
+      <VehicleStatusCard />
     </div>
   );
 }

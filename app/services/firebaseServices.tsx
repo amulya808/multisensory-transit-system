@@ -21,6 +21,7 @@ const database = getDatabase(app);
 type PassengerCountCallback = (count: number) => void;
 type FlameDetectionCallback = (flameDetected: boolean) => void;
 type LocationCallback = (location: { latitude: number; longitude: number }) => void;
+type AbnormalPositionCallback = (abnormal_position: boolean) => void;
 
 
 export const subscribeToPassengerCount = (callback: PassengerCountCallback): Unsubscribe => {
@@ -77,6 +78,24 @@ export const subscribeToLocation = (callback: LocationCallback, errorCallback: (
 
   return unsubscribe;
 }
+
+export const subscribeToAbnormalPosition = (callback: AbnormalPositionCallback): Unsubscribe => {
+  const abnormalPositionRef = ref(
+    database,
+    "bus_data/bus_01/safety_info/abnormal_position"
+  );
+  
+  const unsubscribe = onValue(abnormalPositionRef, (snapshot: DataSnapshot) => {
+    if (snapshot.exists()) {
+      callback(snapshot.val());
+    } else {
+      callback(false); 
+    }
+  });
+  
+  return unsubscribe;
+}
+
 let firebaseInstance: ReturnType<typeof initializeApp> | null = null;
 
 export const getFirebaseInstance = (): ReturnType<typeof initializeApp> => {
@@ -86,11 +105,12 @@ export const getFirebaseInstance = (): ReturnType<typeof initializeApp> => {
   return firebaseInstance;
 };
 
-
 const firebaseService = {
   subscribeToPassengerCount,
   getFirebaseInstance,
   subscribeToFlameDetection,
+  subscribeToLocation,
+  subscribeToAbnormalPosition,
 };
 
 export default firebaseService;
