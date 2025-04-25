@@ -7,7 +7,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
-import { Skeleton } from "./ui/skeleton"
+import { Skeleton } from "../ui/skeleton"
 import { Terminal } from "lucide-react"
 import { subscribeToLocation } from "@/app/services/firebaseServices"
 

@@ -6,11 +6,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 import { 
   subscribeToAbnormalPosition, 
   getFirebaseInstance 
-} from "../app/services/firebaseServices";
+} from "../../app/services/firebaseServices";
 import { getDatabase, onValue, ref } from "firebase/database";
 
 export function VehicleStatusCard() {
