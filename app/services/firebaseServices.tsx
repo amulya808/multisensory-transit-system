@@ -22,6 +22,7 @@ type PassengerCountCallback = (count: number) => void;
 type FlameDetectionCallback = (flameDetected: boolean) => void;
 type LocationCallback = (location: { latitude: number; longitude: number }) => void;
 type AbnormalPositionCallback = (abnormal_position: boolean) => void;
+type EnvironmentCallback = (environment: { temperature: number; humidity: number }) => void;
 
 
 export const subscribeToPassengerCount = (callback: PassengerCountCallback): Unsubscribe => {
@@ -96,6 +97,57 @@ export const subscribeToAbnormalPosition = (callback: AbnormalPositionCallback):
   return unsubscribe;
 }
 
+export const subscribeToTemperature= (callback: (temperature:number) => void ): Unsubscribe => {
+  const temperatureRef = ref(
+    database,
+    "bus_data/bus_01/environmental_data/"
+  );
+  
+  const unsubscribe = onValue(temperatureRef, (snapshot: DataSnapshot) => {
+    if (snapshot.exists()) {
+      callback(snapshot.val());
+    } else {
+      callback(0); 
+    }
+  });
+  
+  return unsubscribe;
+}
+
+  export const subscribeToHumidity = (callback: (humidity:number) => void ): Unsubscribe => {
+    const humidityRef = ref(
+      database,
+      "bus_data/bus_01/environmental_data/"
+    );
+    
+    const unsubscribe = onValue(humidityRef, (snapshot: DataSnapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val());
+      } else {
+        callback(0); 
+      }
+    });
+    
+    return unsubscribe;
+  }
+
+  export const subscribeToEnvironmentalData = (callback: EnvironmentCallback): Unsubscribe => {
+    const environmentalDataRef = ref(
+      database,
+      "bus_data/bus_01/environmental_data/"
+    );
+    
+    const unsubscribe = onValue(environmentalDataRef, (snapshot: DataSnapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val());
+      } else {
+        callback({ temperature: 0, humidity: 0 }); 
+      }
+    });
+    
+    return unsubscribe;
+  }
+
 let firebaseInstance: ReturnType<typeof initializeApp> | null = null;
 
 export const getFirebaseInstance = (): ReturnType<typeof initializeApp> => {
@@ -111,6 +163,9 @@ const firebaseService = {
   subscribeToFlameDetection,
   subscribeToLocation,
   subscribeToAbnormalPosition,
+  subscribeToTemperature,
+  subscribeToHumidity,
+  subscribeToEnvironmentalData,
 };
 
 export default firebaseService;
