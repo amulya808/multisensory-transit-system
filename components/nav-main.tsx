@@ -38,7 +38,7 @@ export function NavMain({
             return (
               <SidebarMenuItem key={item.title}>
                 <Link href={item.url}>
-                  <SidebarMenuButton tooltip={item.title} isActive={isActive} className="data-[active=true]:text-black">
+                  <SidebarMenuButton tooltip={item.title} isActive={isActive}>
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                   </SidebarMenuButton>

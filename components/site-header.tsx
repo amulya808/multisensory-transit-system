@@ -1,6 +1,7 @@
 "use client"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { DeviceStatus } from "./device-status"
+import { DarkModeButton } from "./dark-mode"
 
 export function SiteHeader() {
   return (
@@ -11,6 +12,7 @@ export function SiteHeader() {
         <h1 className="text-base font-medium">Transit Dashboard</h1>
         
         <div className="ml-auto flex items-center gap-2">
+        <DarkModeButton/>
           <DeviceStatus deviceId="bus_01" />
           <div className="hidden lg:flex lg:gap-2">
           </div>
