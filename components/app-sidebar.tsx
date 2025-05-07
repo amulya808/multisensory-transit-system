@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   IconDashboard,
   IconCar,
+  IconReportAnalytics,
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -25,7 +26,11 @@ const data = {
       url: "/dashboard",
       icon: IconDashboard,
     },
-
+    {
+      title: "Reports",
+      url: "/reports",
+      icon: IconReportAnalytics,
+    },
   ],
 }
 
