@@ -6,6 +6,7 @@ import {
   IconDashboard,
   IconCar,
   IconReportAnalytics,
+  IconCreditCardFilled,
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -31,6 +32,11 @@ const data = {
       url: "/reports",
       icon: IconReportAnalytics,
     },
+    {
+      title: "Cards",
+      url: "/cards",
+      icon: IconCreditCardFilled,
+    }
   ],
 }
 
