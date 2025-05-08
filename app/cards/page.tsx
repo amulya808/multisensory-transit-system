@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import CardManagement from "@/components/rfid-card"
 import { SiteHeader } from "@/components/site-header"
-import TapHistory from "@/components/taps"
+import TapHistory from "@/components/rfid-tap-history"
 
 import {
   SidebarInset,
