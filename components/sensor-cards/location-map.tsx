@@ -7,11 +7,11 @@ import { useEffect } from 'react';
 
 L.Icon.Default.mergeOptions({
 
-    iconUrl: '/leaflet/marker-icon.png',
-    iconRetinaUrl: '/leaflet/marker-icon-2x.png',
+    iconUrl: '/image/BusMapIcon.svg',
+    iconRetinaUrl: '/image/BusMapIcon.svg',
     shadowUrl: '/leaflet/marker-shadow.png',
 
-    iconSize: [25, 41],
+    iconSize: [40, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
@@ -63,13 +63,13 @@ return (
         style={{ height: '100%', width: '100%', outline: 'none' }}
     >
                  <LayersControl position="topright">
-                <LayersControl.BaseLayer checked name="Street Map">
+                <LayersControl.BaseLayer name="Street Map">
                     <TileLayer
                         attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                 </LayersControl.BaseLayer>
-                <LayersControl.BaseLayer name="Satellite">
+                <LayersControl.BaseLayer checked name="Satellite">
                     <TileLayer
                         attribution='© <a href="https://www.esri.com">Esri</a>'
                         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
