@@ -148,6 +148,29 @@ export const subscribeToTemperature= (callback: (temperature:number) => void ): 
     return unsubscribe;
   }
 
+  export const subscribeToTrafficSigns = (callback: (signData: {
+    sign_detected?: string;
+    confidence?: number;
+    last_update?: string | number;
+  }) => void) => {
+    const db = getDatabase(getFirebaseInstance());
+    const signRef = ref(db, "traffic_signs/cam_01");
+    
+    const unsubscribe = onValue(signRef, (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val());
+      } else {
+        // Provide default values if no data exists yet
+        callback({
+          sign_detected: "none",
+          confidence: 0,
+          last_update: Date.now().toString()
+        });
+      }
+    });
+    
+    return unsubscribe;
+  };
 let firebaseInstance: ReturnType<typeof initializeApp> | null = null;
 
 export const getFirebaseInstance = (): ReturnType<typeof initializeApp> => {
@@ -166,6 +189,7 @@ const firebaseService = {
   subscribeToTemperature,
   subscribeToHumidity,
   subscribeToEnvironmentalData,
+  subscribeToTrafficSigns
 };
 
 export default firebaseService;

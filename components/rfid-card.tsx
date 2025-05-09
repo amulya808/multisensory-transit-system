@@ -177,7 +177,7 @@ export default function CardManagement() {
                                 <div className="p-4">
                                   <div className="flex flex-col items-center gap-2 text-center mb-4">
                                     <div className="rounded-full bg-green-100 p-3">
-                                      <Image src="/image/RFIDPay.png" alt="RFID Card" width={50} height={50} className="object-contain" />
+                                      <Image src="/image/RFIDPay.svg" alt="RFID Card" width={50} height={50} className="object-contain" />
                                       
                                     </div>
                                     <div>
