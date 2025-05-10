@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { IconCar4wd, IconFlame, IconMapPin } from "@tabler/icons-react";
+import { IconCar4wd, IconFlame } from "@tabler/icons-react";
 import {
   Table,
   TableBody,
@@ -22,6 +22,18 @@ type Report = {
   longitude?: number;
 };
 
+// firebase data structure
+type FirebaseReportData = {
+  timestamp?: number;
+  gps_status?: string;
+  latitude?: number;
+  longitude?: number;
+};
+
+type FirebaseReportsData = {
+  [key: string]: FirebaseReportData;
+};
+
 export function BusReportsTable() {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -32,10 +44,10 @@ export function BusReportsTable() {
 
     const unsubscribe = onValue(reportsRef, (snapshot) => {
       if (snapshot.exists()) {
-        const reportsData = snapshot.val();
+        const reportsData = snapshot.val() as FirebaseReportsData;
         const parsedReports: Report[] = [];
         
-        Object.entries(reportsData).forEach(([id, data]: [string, any]) => {
+        Object.entries(reportsData).forEach(([id, data]) => {
           // extract the report type (fire or position) from the id
           const type = id.split('-')[0];
           
