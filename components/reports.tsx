@@ -26,8 +26,10 @@ type Report = {
 type FirebaseReportData = {
   timestamp?: number;
   gps_status?: string;
-  latitude?: number;
-  longitude?: number;
+  location?: {
+    latitude?: number;
+    longitude?: number;
+  };
 };
 
 type FirebaseReportsData = {
@@ -58,8 +60,8 @@ export function BusReportsTable() {
               type: type as "fire" | "position",
               timestamp: data.timestamp || 0,
               gps_status: data.gps_status,
-              latitude: data.latitude,
-              longitude: data.longitude
+              latitude: data.location?.latitude,
+              longitude: data.location?.longitude,
             });
           }
         });

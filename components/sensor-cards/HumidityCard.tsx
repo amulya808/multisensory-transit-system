@@ -31,7 +31,7 @@ export function HumidityCard() {
       status: "Humid!"
     };
     return {
-      card: "border-green-500/50",
+      card: "border-green-500/50 bg-green-500/10",
       text: "text-green-500 dark:text-green-400",
       status: "Normal"
     };
