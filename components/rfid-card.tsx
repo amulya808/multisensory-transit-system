@@ -1,15 +1,26 @@
 "use client";
 import { useState, useEffect } from "react";
-import { getDatabase, ref, onValue, update } from "firebase/database";
+import { getDatabase, ref, onValue, update, remove } from "firebase/database";
 import { getFirebaseInstance } from "../app/services/firebaseServices";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import { Input } from "./ui/input";
 import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
-import {IconWallet, IconLock, IconLockOpen, IconCreditCardPay } from "@tabler/icons-react";
+import { IconWallet, IconLock, IconLockOpen, IconCreditCardPay, IconCreditCardOff } from "@tabler/icons-react";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 
 // rfid card interface with authorization field
 interface CardData {
@@ -53,7 +64,7 @@ export default function CardManagement() {
     });
   }, []);
 
-  // handle card balance top-up 
+  // handle card balance top-up - FIXED
   const handleTopup = () => {
     if (!selectedCard || topupAmount <= 0 || !selectedCard.authorized) return;
     
@@ -64,7 +75,7 @@ export default function CardManagement() {
       balance: Number(selectedCard.balance) + Number(topupAmount)
     }).then(() => {
       setTopupAmount(0);
-     
+      // Removed local state update - let Firebase onValue handle the update
     }).catch(error => console.error("Error updating balance:", error));
   };
 
@@ -85,6 +96,20 @@ export default function CardManagement() {
       ));
     }).catch(error => {
       console.error("Error updating authorization:", error);
+    });
+  };
+
+  // deletes rfid card
+  const handleDeleteCard = (card: CardData) => {
+    const database = getDatabase(getFirebaseInstance());
+    const cardRef = ref(database, `cards/${card.id}`);
+    
+    remove(cardRef).then(() => {
+      console.log(`Successfully deleted card ${card.id}`);
+      
+      setCards(prevCards => prevCards.filter(c => c.id !== card.id));
+    }).catch(error => {
+      console.error("Error deleting card:", error);
     });
   };
 
@@ -226,6 +251,37 @@ export default function CardManagement() {
                               </div>
                             </DrawerContent>
                           </Drawer>
+
+                          {/* confirm dialog for deleting rfid */}
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button 
+                                variant="destructive" 
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                              >
+                                <IconCreditCardOff className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete RFID Card</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to delete the {card.rfidId || card.id}
+                                  RFID card?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className="bg-rose-700 hover:bg-rose-600 text-white"
+                                  onClick={() => handleDeleteCard(card)}
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                       </TableCell>
                     </TableRow>
