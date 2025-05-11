@@ -53,7 +53,7 @@ export default function CardManagement() {
     });
   }, []);
 
-  // handle card balance top-up
+  // handle card balance top-up 
   const handleTopup = () => {
     if (!selectedCard || topupAmount <= 0 || !selectedCard.authorized) return;
     
@@ -64,12 +64,7 @@ export default function CardManagement() {
       balance: Number(selectedCard.balance) + Number(topupAmount)
     }).then(() => {
       setTopupAmount(0);
-      // Update local state for immediate UI feedback
-      setCards(prevCards => prevCards.map(c => 
-        c.id === selectedCard.id 
-          ? {...c, balance: Number(c.balance) + Number(topupAmount)} 
-          : c
-      ));
+     
     }).catch(error => console.error("Error updating balance:", error));
   };
 
