@@ -186,9 +186,19 @@ export default function TapHistory() {
             </div>
           </div>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-4">
-            <TabsList className="grid w-full max-w-md grid-cols-2">
-              <TabsTrigger value="successful">Successful Taps</TabsTrigger>
-              <TabsTrigger value="rejected">Rejected Taps</TabsTrigger>
+            <TabsList className="grid w-full max-w-md grid-cols-2 bg-muted/50 dark:bg-muted/70">
+              <TabsTrigger 
+                value="successful"
+                className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm dark:data-[state=active]:bg-accent dark:data-[state=active]:text-accent-foreground transition-all"
+              >
+                Successful Taps
+              </TabsTrigger>
+              <TabsTrigger 
+                value="rejected"
+                className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm dark:data-[state=active]:bg-accent dark:data-[state=active]:text-accent-foreground transition-all"
+              >
+                Rejected Taps
+              </TabsTrigger>
             </TabsList>
           </Tabs>
           
@@ -220,7 +230,7 @@ export default function TapHistory() {
                           <TableCell>
                             <div className="flex flex-col space-y-1">
                               <div className="flex items-center">
-                                <Badge className="bg-teal-800 text-teal-100 hover:bg-teal-700 border-0 rounded-full px-3 mr-2">
+                                <Badge className="bg-emerald-800 text-teal-100 hover:bg-emerald-700 border-0 rounded-full px-3 mr-2">
                                   Enter
                                 </Badge>
                                 <span>{formatTime(journey.tapIn.timestamp)}</span>
@@ -228,8 +238,8 @@ export default function TapHistory() {
                               
                               {journey.tapOut ? (
                                 <div className="flex items-center">
-                                  <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-100 border-0 rounded-full px-3 mr-2">
-                                    Exit
+                                  <Badge className="bg-pink-800 text-rose-100 hover:bg-purple-100 border-0 rounded-full px-3 mr-2">
+                                    Leave
                                   </Badge>
                                   <span>{formatTime(journey.tapOut.timestamp)}</span>
                                 </div>

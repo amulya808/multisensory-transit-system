@@ -21,14 +21,14 @@ export function HumidityCard() {
 
   const getHumidityClasses = (humidity: number) => {
     if (humidity < 30) return {
-      card: "border-yellow-500/50 bg-yellow-500/10",
+      card: "border-yellow-500/50 bg-yellow-600/10",
       text: "text-yellow-500 dark:text-yellow-400",
-      status: "Dry"
+      status: "Dry!"
     };
     if (humidity > 60) return {
       card: "border-blue-500/50 bg-blue-500/10",
       text: "text-blue-500 dark:text-blue-400",
-      status: "Humid"
+      status: "Humid!"
     };
     return {
       card: "border-green-500/50",
@@ -49,7 +49,7 @@ export function HumidityCard() {
             {humidity.toFixed(1)}%
           </CardTitle>
           <CardDescription className="text-xl font-bold">Status:</CardDescription>
-          <CardTitle className={`text-2xl tabular-nums @[250px]/card:text-3xl ${humidityClasses.text}`}>【{humidityClasses.status}】</CardTitle>
+          <CardTitle className={`text-2xl tabular-nums @[250px]/card:text-3xl ${humidityClasses.text}`}>{humidityClasses.status}</CardTitle>
         </CardHeader>
       </Card>
     </>

@@ -23,7 +23,7 @@ export function FireDetectionCard() {
 
   const fireTitleText = flameDetected ? "FIRE ALERT!" : "Normal";
   const fireTitleClasses = flameDetected
-    ? "text-red-500 dark:text-red-400"
+    ? "text-red-800/80 dark:text-red-800"
     : "text-green-500 dark:text-green-400";
   const fireIcon = flameDetected ? (
     <IconFlame className="size-7 text-destructive" />

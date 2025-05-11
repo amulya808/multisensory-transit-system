@@ -25,12 +25,12 @@ export function TemperatureCard() {
       status: "Cold"
     };
     if (temp > 25) return {
-      card: "border-pink-500/50 bg-rose-500/50",
-      text: "text-red-500 dark:text-red-400",
+      card: "border-pink-500/50 bg-rose-900/10",
+      text: "text-rose-500 dark:text-rose-400",
       status: "Hot"
     };
     return {
-      card: "border-green-500/50",
+      card: "border-green-500/50 bg-green-500/10",
       text: "text-green-500 dark:text-green-400",
       status: "Normal"
     };
@@ -41,13 +41,13 @@ export function TemperatureCard() {
     <>
       <Card className={`shadow-sm transition-colors duration-300 ${tempClasses.card}`}>
         <CardHeader>
-          <IconThermometer className="size-6 text-red-600" />
+          <IconThermometer className="size-6 text-pink-700" />
           <CardDescription className="text-xl font-bold">Temperature</CardDescription>
           <CardTitle className={`text-2xl tabular-nums @[250px]/card:text-3xl ${tempClasses.text}`}>
             {temperature.toFixed(1)}°C 
           </CardTitle>
           <CardDescription className="text-xl font-bold">Status:</CardDescription>
-          <CardTitle className={`text-2xl tabular-nums @[250px]/card:text-3xl ${tempClasses.text}`}>【{tempClasses.status}】</CardTitle>
+          <CardTitle className={`text-2xl tabular-nums @[250px]/card:text-3xl ${tempClasses.text}`}>{tempClasses.status}</CardTitle>
           
         </CardHeader>
         
