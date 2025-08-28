@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Multisensory Transit System for Nepal
+
+A complete IoT-based public transportation monitoring system developed for Nepal's bus network. This final year project combines hardware sensors with a web dashboard to monitor vehicle conditions, manage RFID payments, and track buses in real-time across Nepal's urban transport system.
+
+## System Architecture
+
+![System Architecture](public/image/system-architecture.png)
+
+
+## Core Features
+
+### Passenger Monitoring with HCSR501 PIR Sensor
+- **Accurate People Counting**: Tracks passengers boarding and alighting buses
+- **Real-time Occupancy**: Live passenger count displayed on dashboard
+- **Capacity Management**: Alerts when bus approaches maximum capacity
+
+### RFID Payment System (RFC522)
+- **Tap In/Tap Out**: Passengers tap RFID cards when boarding and leaving
+- **Balance Management**: Top-up cards remotely through the web app
+- **Unauthorized Detection**: System flags invalid or blocked cards
+- **Timestamp Accuracy**: Precise logging of all transactions with Nepal time
+
+### Fire Safety with LM393 Flame Sensor
+- **Early Fire Detection**: Immediate alerts for flame detection inside buses
+- **Safety Dashboard**: Visual fire status indicators with alarm systems
+
+### Vehicle Stability Monitoring (MPU6050)
+- **Abnormal Position Detection**: Monitors dangerous vehicle tilts and positions
+- **Safety Alerts**: Real-time alerts logged with timestamps in reports dashboard
+-  **Alert History**: Complete log of all safety incidents
+
+### GPS Tracking with NEO-6M Module
+- **Live Bus Tracking**: Real-time location updates on interactive maps with coordinates
+- **Location Display**: Shows precise latitude and longitude positioning
+
+### Traffic Sign Recognition (ESP32-CAM + Edge Impulse)
+- **Nepal-Specific Training**: Model trained on Nepal's traffic signs including:
+  - Stop signs
+  - No parking zones
+  - No U-turn areas  
+  - Bus stop indicators
+  - Pedestrian crossings
+- **Real-time Processing**: Live traffic sign detection
+- **Driver Assistance**: Visual alerts for detected traffic signs in the dashboard
+
+### Environmental Monitoring (DHT22)
+ - **Temperature Tracking**: Real-time temperature monitoring with status indicators
+ - **Humidity Monitoring**: Live humidity readings with normal/abnormal readings
+ - **Alert Integration**: Environmental data feeds into overall safety monitoring
+
+<details>
+<summary>Hardware Components</summary>
+
+- **ESP32 WROOM-32D**: Main microcontroller for sensor integration and WiFi connectivity
+- **HCSR501 PIR Sensor**: Motion detection for passenger counting
+- **LM393 Flame Sensor**: Fire detection and safety monitoring  
+- **MPU6050 Accelerometer**: 6-axis motion tracking for vehicle stability
+- **NEO-6M GPS Module**: Satellite positioning for location tracking
+- **DHT22 Sensor**: Temperature and humidity monitoring
+- **RFC522 RFID Reader**: Contactless payment card processing
+- **ESP32-CAM Module**: Computer vision for traffic sign recognition
+
+</details>
+
+<details>
+<summary>Software Stack</summary>
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS 4.0, Radix UI components  
+- **Database**: Firebase Realtime Database
+- **Maps**: Leaflet with React-Leaflet for Nepal mapping
+- **Charts**: Recharts for sensor data visualization
+- **ML Model**: Edge Impulse for traffic sign recognition
+- **Hardware Communication**: WiFi-based real-time data transmission
+
+</details>
 
 ## Getting Started
 
-First, run the development server:
-
+1. **Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/multisensory-transit-system.git
+cd multisensory-transit-system
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies**
+```bash
+npm install
+npm install firebase
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Set up Firebase**
+   - Create a Firebase project
+   - Enable Realtime Database
+   - Add your Firebase config to the services
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Run the development server**
+```bash
+npm run dev
+```
 
-## Learn More
+5. **Open the application**
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+## Demo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Visit: [https://multisensory-transit-system.vercel.app/dashboard](https://multisensory-transit-system.vercel.app/dashboard)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*This project was developed as a final year capstone project, demonstrating the integration of IoT sensors, real-time databases, and modern web technologies for smart city applications.*
